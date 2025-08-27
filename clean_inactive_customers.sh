@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Get the absolute path to the Django project directory
-DJANGO_DIR="/path/to/your/alx-backend-graphql_crm/crm"
+# Get the absolute path to the Django project directory (adjust based on your setup)
+DJANGO_DIR="/home/ubuntu/alx-backend-graphql_crm/crm"
 
 # Change to the Django project directory
 cd "$DJANGO_DIR" || exit 1
@@ -10,17 +10,18 @@ cd "$DJANGO_DIR" || exit 1
 python manage.py shell << EOF
 from django.utils import timezone
 from datetime import timedelta
-from your_app.models import Customer, Order  # Replace 'your_app' with your actual app name
+from customers.models import Customer, Order  # Using your customers app
 import datetime
 
 # Calculate date one year ago
 one_year_ago = timezone.now() - timedelta(days=365)
 
 # Find customers with no orders since one year ago
+# Adjust this query based on your actual model relationships
 inactive_customers = Customer.objects.filter(
-    order__isnull=True
+    orders__isnull=True  # Assuming related_name='orders'
 ) | Customer.objects.filter(
-    order__created_at__lt=one_year_ago
+    orders__created_at__lt=one_year_ago
 ).distinct()
 
 # Count before deletion
